@@ -2,18 +2,56 @@
 const express = require('express');
 const app = express();
 
-let topBooks = [
+let topMovies = [
   {
-    title: 'Harry Potter and the Sorcerer\'s Stone',
-    author: 'J.K. Rowling'
+    title: 'Awesome Movie 1',
+    director: 'Director 1',
+    yearReleased: 'Year 1'
   },
   {
-    title: 'Lord of the Rings',
-    author: 'J.R.R. Tolkien'
+    title: 'Awesome Movie 2',
+    director: 'Director 2',
+    yearReleased: 'Year 2'
   },
   {
-    title: 'Twilight',
-    author: 'Stephanie Meyer'
+    title: 'Awesome Movie 3',
+    director: 'Director 3',
+    yearReleased: 'Year 3'
+  },
+  {
+    title: 'Awesome Movie 4',
+    director: 'Director 4',
+    yearReleased: 'Year 4'
+  },
+  {
+    title: 'Awesome Movie 5',
+    director: 'Director 5',
+    yearReleased: 'Year 5'
+  },
+  {
+    title: 'Awesome Movie 6',
+    director: 'Director 6',
+    yearReleased: 'Year 6'
+  },
+  {
+    title: 'Awesome Movie 7',
+    director: 'Director 7',
+    yearReleased: 'Year 7'
+  },
+  {
+    title: 'Awesome Movie 8',
+    director: 'Director 8',
+    yearReleased: 'Year 8'
+  },
+  {
+    title: 'Awesome Movie 9',
+    director: 'Director 9',
+    yearReleased: 'Year 9'
+  },
+  {
+    title: 'Awesome Movie 10',
+    director: 'Director 10',
+    yearReleased: 'Year 10'
   }
 ];
 
@@ -28,8 +66,8 @@ app.get('/documentation', (req, res) => {
   res.sendFile('public/documentation.html', { root: __dirname });
 });
 
-app.get('/books', (req, res) => {
-  res.json(topBooks);
+app.get('/movies', (req, res) => {
+  res.json(topMovies);
 });
 
 
