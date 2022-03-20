@@ -1,6 +1,10 @@
 //Utilize Express framework for this app
-const express = require('express');
+const express = require('express'),
+  morgan = require('morgan'); //custom middleware for loging request details to log.txt
+
 const app = express();
+
+app.use(morgan('common'));
 
 let topMovies = [
   {
@@ -55,6 +59,8 @@ let topMovies = [
   }
 ];
 
+app.use(express.static('public')); //serves static files from the 'public' folder
+
 // GET requests - these are endpoints (or routes)
 // The structure is: app.METHOD(PATH, HANDLER)
 // 'app' is an instance of express()
@@ -65,8 +71,6 @@ app.get('/', (req, res) => {
 app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
-
-app.use(express.static('public')); //serves static files from the 'public' folder
 
 // listen for requests on port 8080
 app.listen(8080, () => {
