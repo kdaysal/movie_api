@@ -59,19 +59,16 @@ let topMovies = [
 // The structure is: app.METHOD(PATH, HANDLER)
 // 'app' is an instance of express()
 app.get('/', (req, res) => {
-  res.send('Welcome to my book club!');
-});
-
-app.get('/documentation', (req, res) => {                  
-  res.sendFile('public/documentation.html', { root: __dirname });
+  res.send('Welcome to myFlix! - a web application to provide users with information about various movies, directors, genres, and more!');
 });
 
 app.get('/movies', (req, res) => {
   res.json(topMovies);
 });
 
+app.use(express.static('public')); //serves static files from the 'public' folder
 
-// listen for requests
+// listen for requests on port 8080
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
