@@ -17,6 +17,189 @@
         to this information, that their requests can be processed, and that all necessary data can be
         stored.
     </p>
+    <br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Business Logic</th>
+                <th scope="col">URL</th>
+                <th scope="col">HTTP Method</th>
+                <th scope="col">Query Parameters</th>
+                <th scope="col">Request Body Data Format</th>
+                <th scope="col">Response Body Data Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Return a list of all movies to the user</td>
+                <td>/movies</td>
+                <td>GET</td>
+                <td>None</td>
+                <td>None</td>
+                <td>A JSON object containing data for all movies</td>
+            </tr>
+            <tr>
+                <td>Return data (description, genre, director, image URL, featured-or-not) about a movie -by title-</td>
+                <td>/movies/[title]</td>
+                <td>GET</td>
+                <td>:title</td>
+                <td>None</td>
+                <td>A JSON object containing data for the specified movie including description, genre, director, img
+                    URL, featured-or-not. For example:
+                    <pre>
+            <code>
+  {
+    Title: 'Memento', 
+    Description: 'Memento is a 2000 American neo-noir mystery thriller film', 
+    Genre: {
+      name: 'mystery',
+      description: 'a novel, short story, play, or film whose plot involves a crime or other event that remains puzzlingly unsettled until the very end'
+    } 
+    Director: {
+      name: 'Christopher Nolan', 
+      birth: '1970',
+      death: 'N/A'
+      bio: 'Christopher Edward Nolan (born 30 July 1970) is a British-American film director, producer, and screenwriter.'
+    },
+    ImgURL: '',
+    featured: 'Yes'
+  }
+            </code>
+          </pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Return data about a genre (description) -by genre name/title (e.g., "Horror")-</td>
+                <td>/movies/genres/[genre]</td>
+                <td>GET</td>
+                <td>:genre</td>
+                <td>None</td>
+                <td>A JSON object containing data for the specified genre. For example:
+                    <pre>
+            <code>
+  { 
+    name: 'Comedy', 
+    description: 'a play, movie, etc., of light and humorous character with a happy or cheerful ending',
+  }
+            </code>
+          </pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Return data about a director (bio, birth year, death year) -by name-</td>
+                <td>/movies/directors/[name]</td>
+                <td>GET</td>
+                <td>:name</td>
+                <td>None</td>
+                <td>A JSON object containing data for the specified director. For example:
+                    <pre>
+            <code>
+  { 
+    name: 'Quentin Tarantino', 
+    birth: '1963', 
+    death: 'N/A',
+    bio: 'Quentin Jerome Tarantino (born March 27, 1963)[2] is an American filmmaker, actor, film critic and author.'
+  }
+            </code>
+          </pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Allow new users to register</td>
+                <td>/users</td>
+                <td>POST</td>
+                <td>None</td>
+                <td>A JSON object containing data for the new user. For example:
+                    <pre>
+            <code>
+  { 
+    "firstname": "George",
+    "lastname": "Washington"
+    "username": "firstprez", 
+    "email": "georgeW@gmail.com", 
+    "password": "abc123xyz!"
+    "birthday": "01/22/1732", 
+    "telephone": "770-707-7700"
+  }
+            </code>
+          </pre>
+                </td>
+                <td>A JSON object containing data for the new user, including newly-added ID. For example:
+                    <pre>
+            <code>
+                { 
+                    "id": "47816",
+                    "firstname": "George",
+                    "lastname": "Washington"
+                    "username": "firstprez", 
+                    "email": "georgeW@gmail.com", 
+                    "password": "abc123xyz!"
+                    "birthday": "01/22/1732", 
+                    "telephone": "770-707-7700"
+                  }
+            </code>
+          </pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Allow users to update their existing user info (username)</td>
+                <td>/users/[username]</td>
+                <td>PUT</td>
+                <td>:username</td>
+                <td> A JSON object containing the updated username. For example:
+                    <pre>
+            <code>
+  { 
+    "username": "oldestprez"
+  }
+            </code>
+          </pre>
+                </td>
+                <td>A JSON object with the full updated user profile. For example:
+                    <pre>
+            <code>
+                { 
+                    "id": "47816",
+                    "firstname": "George",
+                    "lastname": "Washington"
+                    "username": "oldestprez", 
+                    "email": "georgeW@gmail.com", 
+                    "password": "abc123xyz!"
+                    "birthday": "01/22/1732", 
+                    "telephone": "770-707-7700"
+                  }
+            </code>
+          </pre>
+                </td>
+            </tr>
+            <tr>
+                <td>Allow users to add a movie to their list of favorites -by movie name-</td>
+                <td>/users/[username]/[movie]</td>
+                <td>POST</td>
+                <td>:username, :movie</td>
+                <td>None</td>
+                <td>A text message confirming that the movie was added</td>
+            </tr>
+            <tr>
+                <td>Allow users to remove a movie from their list of favorites -by movie name-</td>
+                <td>/users/[username]/[movie]</td>
+                <td>DELETE</td>
+                <td>:username, :movie</td>
+                <td>None</td>
+                <td>A text message confirming that the movie was removed</td>
+            </tr>
+            <tr>
+                <td>Allow existing users to deregister from myFlix</td>
+                <td>/users/[username]</td>
+                <td>DELETE</td>
+                <td>:username</td>
+                <td>None</td>
+                <td>A text message confirming that the user was deregistered</td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
 
 </html>
