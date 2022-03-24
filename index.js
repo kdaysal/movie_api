@@ -107,7 +107,7 @@ app.put('/users/:id', (req, res) => {
 app.post('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;//pulling multiple parameters from the url
 
-  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+  let user = users.find(user => user.id == id);
 
   if (user) {
     user.favoriteMovies.push(movieTitle);
@@ -121,13 +121,27 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 app.delete('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;//pulling multiple parameters from the url
 
-  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+  let user = users.find(user => user.id == id);
 
   if (user) {
     user.favoriteMovies = user.favoriteMovies.filter(title => title !== movieTitle);
     res.status(200).send(`${movieTitle} has been removed from user ${id}'s array`);
   } else {
     res.status(400).send('no such movie title exists, sorry!')
+  }
+});
+
+//DELETE - Allow existing users to deregister from myFlix - by id-
+app.delete('/users/:id', (req, res) => {
+  const { id } = req.params;//pulling multiple parameters from the url
+
+  let user = users.find(user => user.id == id);
+
+  if (user) {
+    users = users.filter(user => user.id != id); //comparing string to a number, do not use strict equality here
+    res.status(200).send(`user ${id} has been deregistered from myFlix`);
+  } else {
+    res.status(400).send('no such user exists, sorry!');
   }
 });
 
