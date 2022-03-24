@@ -3,6 +3,7 @@ const express = require('express'),
   morgan = require('morgan'), //custom middleware for loging request details to log.txt
   bodyParser = require('body-parser'), //middleware for error-handling
   methodOverride = require('method-override'); //middleware for error-handling
+const res = require('express/lib/response');
 
 const app = express();
 
@@ -139,8 +140,25 @@ app.get('/', (req, res) => {
   res.send('Welcome to myFlix! - a web application to provide users with information about various movies, directors, genres, and more!');
 });
 
+//return a list of all movies to the user
 app.get('/movies', (req, res) => {
-  res.json(topMovies);
+  res.status(200).json(movies);
+});
+
+//return data (description, genre, director, image URL, featured-or-not) about a movie -by title-
+//This assigns whatever the user inputs after the 'movies/' to the request (req) as a parameter
+app.get('/movies/:title', (req, res) => {
+  // const title = req.params.title; refactored below in { object destructuring } format
+  const { title } = req.params;
+  const movie = movies.find(movie => movie.title === title);
+
+
+if (movie) {
+  res.status(200).json(movie);
+}
+else {
+  res.status(400).send('no such movie in the database');
+}
 });
 
 //error handling - must come last in chain of middleware but before app.listen()
