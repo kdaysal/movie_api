@@ -21,81 +21,21 @@ let users = [
   {
     id: 1,
     name: "David",
+    username: "dvid123",
     favoriteMovies: []
   }
   ,
   {
     id: 2,
     name: "Gloria",
+    username: "glory123",
     favoriteMovies: ["Melancholia"]
   },
   {
     id: 3,
     name: "David",
+    username: "otherDavid",
     favoriteMovies: ["Scarface", "Requiem for a Dream"]
-  }
-];
-
-let topMovies = [
-  {
-    title: 'Awesome Movie 1',
-    genre: 'Genre 1',
-    director: 'Director 1',
-    yearReleased: 'Year 1'
-  },
-  {
-    title: 'Awesome Movie 2',
-    genre: 'Genre 2',
-    director: 'Director 2',
-    yearReleased: 'Year 2'
-  },
-  {
-    title: 'Awesome Movie 3',
-    genre: 'Genre 3',
-    director: 'Director 3',
-    yearReleased: 'Year 3'
-  },
-  {
-    title: 'Awesome Movie 4',
-    genre: 'Genre 4',
-    director: 'Director 4',
-    yearReleased: 'Year 4'
-  },
-  {
-    title: 'Awesome Movie 5',
-    genre: 'Genre 5',
-    director: 'Director 5',
-    yearReleased: 'Year 5'
-  },
-  {
-    title: 'Awesome Movie 6',
-    genre: 'Genre 6',
-    director: 'Director 6',
-    yearReleased: 'Year 6'
-  },
-  {
-    title: 'Awesome Movie 7',
-    genre: 'Genre 7',
-    director: 'Director 7',
-    yearReleased: 'Year 7'
-  },
-  {
-    title: 'Awesome Movie 8',
-    genre: 'Genre 8',
-    director: 'Director 8',
-    yearReleased: 'Year 8'
-  },
-  {
-    title: 'Awesome Movie 9',
-    genre: 'Genre 9',
-    director: 'Director 9',
-    yearReleased: 'Year 9'
-  },
-  {
-    title: 'Awesome Movie 10',
-    genre: 'Genre 10',
-    director: 'Director 10',
-    yearReleased: 'Year 10'
   }
 ];
 
@@ -134,7 +74,7 @@ let movies = [
 
 app.use(express.static('public')); //serves static files from the 'public' folder
 
-// CREATE (POST)
+// CREATE - POST - Allow new users to register)
 app.post('/users', (req, res) => {
   const newUser = req.body //the body-parser package is what allows this line to work
 
@@ -148,19 +88,64 @@ app.post('/users', (req, res) => {
   }
 })
 
-// GET requests - these are endpoints (or routes)
+//UPDATE - PUT - Allow users to update their existing user info (username) -by id-
+app.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const updatedUserName = req.body;
+
+  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+
+  if (user) {
+    user.username = updatedUserName.username;
+    res.status(200).json(user);
+  } else {
+    res.status(400).send('no such username exists, sorry!')
+  }
+})
+
+//CREATE - POST - Allow users to add a movie to their list of favorites -by id- / -by movie name-
+app.post('/users/:id/:movieTitle', (req, res) => {
+  const { id, movieTitle } = req.params;//pulling multiple parameters from the url
+
+  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+
+  if (user) {
+    user.favoriteMovies.push(movieTitle);
+    res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
+  } else {
+    res.status(400).send('no such movie title exists, sorry!')
+  }
+});
+
+//DELETE - Allow users to remove a movie from their list of favorites -by movie name-
+app.delete('/users/:id/:movieTitle', (req, res) => {
+  const { id, movieTitle } = req.params;//pulling multiple parameters from the url
+
+  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+
+  if (user) {
+    user.favoriteMovies = user.favoriteMovies.filter(title => title !== movieTitle);
+    res.status(200).send(`${movieTitle} has been removed from user ${id}'s array`);
+  } else {
+    res.status(400).send('no such movie title exists, sorry!')
+  }
+});
+
+// HTTP requests - these are just endpoints (or routes)
 // The structure is: app.METHOD(PATH, HANDLER)
 // 'app' is an instance of express()
+
+//READ - GET - Show home directory content
 app.get('/', (req, res) => {
   res.send('Welcome to myFlix! - a web application to provide users with information about various movies, directors, genres, and more!');
 });
 
-//return a list of all movies to the user
+//READ - GET - return a list of all movies to the user
 app.get('/movies', (req, res) => {
   res.status(200).json(movies);
 });
 
-//return data (description, genre, director, image URL, featured-or-not) about a movie -by title-
+//READ - GET - return data (description, genre, director, image URL, featured-or-not) about a movie -by title-
 //this assigns whatever the user inputs after the 'movies/' to the request (req) as a parameter called 'title'
 app.get('/movies/:title', (req, res) => {
   // const title = req.params.title; refactored below in { object destructuring } format
@@ -175,7 +160,7 @@ app.get('/movies/:title', (req, res) => {
   }
 });
 
-//return data about a genre (description) -by genre name/title- (e.g., "Horror")
+//READ - GET - return data about a genre (description) -by genre name/title- (e.g., "Horror")
 app.get('/movies/genre/:genreName', (req, res) => {
   // const title = req.params.title; refactored below in { object destructuring } format
   const { genreName } = req.params;
@@ -189,11 +174,11 @@ app.get('/movies/genre/:genreName', (req, res) => {
   }
 });
 
-//return data about a director (bio, birth year, death year) -by name-
+//READ - GET - return data about a director (bio, birth year, death year) -by name-
 app.get('/movies/directors/:directorName', (req, res) => {
   // const title = req.params.title; refactored below in { object destructuring } format
   const { directorName } = req.params;
-  const director = movies.find(movie => movie.director.name === directorName).director; 
+  const director = movies.find(movie => movie.director.name === directorName).director;
 
   if (director) {
     res.status(200).json(director);
