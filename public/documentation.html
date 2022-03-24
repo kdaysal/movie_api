@@ -143,10 +143,10 @@
                 </td>
             </tr>
             <tr>
-                <td>Allow users to update their existing user info (username)</td>
-                <td>/users/[username]</td>
+                <td>Allow users to update their existing user info (username) -by id-</td>
+                <td>/users/[id]</td>
                 <td>PUT</td>
-                <td>:username</td>
+                <td>:id</td>
                 <td> A JSON object containing the updated username. For example:
                     <pre>
             <code>
@@ -175,17 +175,17 @@
             </tr>
             <tr>
                 <td>Allow users to add a movie to their list of favorites -by movie name-</td>
-                <td>/users/[username]/[movie]</td>
+                <td>/users/[id]/[movieTitle]</td>
                 <td>POST</td>
-                <td>:username, :movie</td>
+                <td>:id, :movieTitle</td>
                 <td>None</td>
                 <td>A text message confirming that the movie was added</td>
             </tr>
             <tr>
                 <td>Allow users to remove a movie from their list of favorites -by movie name-</td>
-                <td>/users/[username]/[movie]</td>
+                <td>/users/[id]/[movieTitle]</td>
                 <td>DELETE</td>
-                <td>:username, :movie</td>
+                <td>:id, :movieTitle</td>
                 <td>None</td>
                 <td>A text message confirming that the movie was removed</td>
             </tr>
