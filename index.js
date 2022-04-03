@@ -1,3 +1,15 @@
+//require the Mongoose package and models.js file
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+
+//these variables refer to the model names as defined in the models.js file
+const Movies = Models.Movie;
+const Users = Models.User;
+
+//leaving my db name as the default 'test' for now
+//this allows Mongoose to connect to the db to perform CRUD operations on its documents from within my REST API
+mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
+
 //Utilize Express framework for this app
 const express = require('express'),
   morgan = require('morgan'), //custom middleware for loging request details to log.txt
