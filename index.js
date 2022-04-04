@@ -236,6 +236,18 @@ app.get('/movies/directors/:directorName', (req, res) => {
   }
 });
 
+// READ - GET - return data about a specific user -by username-
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
 //error handling - must come last in chain of middleware but before app.listen()
 app.use((err, req, res, next) => {
   console.error(err.stack);

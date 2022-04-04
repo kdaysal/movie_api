@@ -105,6 +105,31 @@
           </pre>
         </td>
       </tr>
+
+      <tr>
+        <td>Return data about a specific user -by Username-</td>
+        <td>/users/[Username]</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>None</td>
+        <td>A JSON object containing data for the specified user. For example:
+          <pre>
+            <code>
+              {
+                "_id": "62465a13588b08b7830a67f1",
+                "Username": "caroline456",
+                "Password": "catsrule",
+                "Email": "caroline456@gmail.com",
+                "BirthDate": "1988-11-09",
+                "FavoriteMovies": [
+                    "6243b2334ec432acf8e95005",
+                    "6243c21a28d28bb9b6f2dac8"
+                ]
+            </code>
+          </pre>
+        </td>
+      </tr>
+
       <tr>
         <td>Allow new users to register</td>
         <td>/users</td>
