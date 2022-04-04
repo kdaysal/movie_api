@@ -49,22 +49,24 @@
           URL, featured-or-not. For example:
           <pre>
             <code>
-  {
-    Title: 'Memento', 
-    Description: 'Memento is a 2000 American neo-noir mystery thriller film', 
-    Genre: {
-      name: 'mystery',
-      description: 'a novel, short story, play, or film whose plot involves a crime or other event that remains puzzlingly unsettled until the very end'
-    } 
-    Director: {
-      name: 'Christopher Nolan', 
-      birth: '1970',
-      death: 'N/A'
-      bio: 'Christopher Edward Nolan (born 30 July 1970) is a British-American film director, producer, and screenwriter.'
-    },
-    ImgURL: '',
-    featured: 'Yes'
-  }
+              {
+                "_id" : ObjectId("6243c97d28d28bb9b6f2dacc"),
+                "Title" : "Knocked Up",
+                "Description" : "---UPDATED DESCRIPTION---Knocked Up is a 2007 American romantic comedy film written, co-produced and directed by Judd Apatow, and starring Seth Rogen, Katherine Heigl, Paul Rudd, and Leslie Mann. It follows the repercussions of a drunken one-night stand between a slacker and a recently promoted media personality that results in an unintended pregnancy.",
+                "Genre" : {
+                        "Name" : "Comedy",
+                        "Description" : "Comedy is a genre of film in which the main emphasis is on humor. These films are designed to make the audience laugh through amusement and most often work by exaggerating characteristics for humorous effect."
+                },
+                "Director" : {
+                        "Name" : "Judd Apatow",
+                        "Bio" : "Judd Apatow is an American producer, writer, director, actor and stand-up comedian.",
+                        "Birth" : "1967-01-01",
+                        "Death" : ""
+                },
+                "ImagePath" : "https://www.imdb.com/title/tt0478311/mediaviewer/rm592592384/",
+                "Featured" : false,
+                "Actors" : [ ]
+        }
             </code>
           </pre>
         </td>
@@ -107,10 +109,10 @@
       </tr>
 
       <tr>
-        <td>Return data about a specific user -by Username-</td>
-        <td>/users/[Username]</td>
+        <td>Return data about a specific user -by username-</td>
+        <td>/users/[username]</td>
         <td>GET</td>
-        <td>None</td>
+        <td>:username</td>
         <td>None</td>
         <td>A JSON object containing data for the specified user. For example:
           <pre>

@@ -138,19 +138,17 @@ app.get('/movies', (req, res) => {
     });
 });
 
-//READ - GET - return data (description, genre, director, image URL, featured-or-not) about a movie -by title-
-//this assigns whatever the user inputs after the 'movies/' to the request (req) as a parameter called 'title'
-app.get('/movies/:title', (req, res) => {
-  // const title = req.params.title; refactored below in { object destructuring } format
-  const { title } = req.params;
-  const movie = movies.find(movie => movie.title === title);
 
-  if (movie) {
-    res.status(200).json(movie);
-  }
-  else {
-    res.status(400).send('no such movie in the database');
-  }
+// READ - GET - return data about a move -by title-
+app.get('/movies/:title', (req, res) => {
+  Movies.findOne({ title: req.params.title })
+    .then((movie) => {
+      res.json(movie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 //READ - GET - return data about a genre (description) -by genre name/title- (e.g., "Horror")
