@@ -138,7 +138,6 @@ app.get('/movies', (req, res) => {
     });
 });
 
-
 // READ - GET - return data about a move -by title-
 app.get('/movies/:title', (req, res) => {
   Movies.findOne({ title: req.params.title })
@@ -151,18 +150,16 @@ app.get('/movies/:title', (req, res) => {
     });
 });
 
-//READ - GET - return data about a genre (description) -by genre name/title- (e.g., "Horror")
-app.get('/movies/genre/:genreName', (req, res) => {
-  // const title = req.params.title; refactored below in { object destructuring } format
-  const { genreName } = req.params;
-  const genre = movies.find(movie => movie.genre.name === genreName).genre; //the '.genre' at the end of the find() method is accessing just the genre data (via dot notation)
-
-  if (genre) {
-    res.status(200).json(genre);
-  }
-  else {
-    res.status(400).send('no such genre in the database');
-  }
+// READ - GET - return data about a genre -by genre name-
+app.get('/movies/genres/:genre', (req, res) => {
+  Movies.findOne({ 'Genre.Name': req.params.genre })
+    .then((movie) => {
+      res.json(movie.Genre);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(400).send('Error: ' + err);
+    });
 });
 
 //READ - GET - return data about a director (bio, birth year, death year) -by name-
