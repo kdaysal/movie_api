@@ -29,73 +29,11 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(methodOverride());
 
-let users = [
-  {
-    id: 1,
-    name: "David",
-    username: "dvid123",
-    favoriteMovies: []
-  }
-  ,
-  {
-    id: 2,
-    name: "Gloria",
-    username: "glory123",
-    favoriteMovies: ["Melancholia"]
-  },
-  {
-    id: 3,
-    name: "David",
-    username: "otherDavid",
-    favoriteMovies: ["Scarface", "Requiem for a Dream"]
-  }
-];
 
-let movies = [
-  {
-    "title": "My Cousin Vinny",
-    "description": "-PLACEHOLDER- Description of the movie.",
-    "genre": {
-      "name": "Comedy",
-      "description": "a play, movie, etc., of light and humorous character with a happy or cheerful ending"
-    },
-    "director": {
-      "name": "Jonathan Lynn",
-      "bio": "Jonathan Lynn (born 3 April 1943) is an English stage and film director, producer, writer, and actor. He is known for directing comedy films such as Clue (1985), Nuns on the Run (1990), My Cousin Vinny (1992) and The Whole Nine Yards (2000). He co-created and co-wrote the television series Yes Minister (1980–1984, 2013) and Yes, Prime Minister (1986–1988).",
-      "birth year": 1943
-    },
-    "imageURL": "https://www.themoviedb.org/t/p/w600_and_h900_bestv2/nk5XnrehDowm5Q5Wr8hsObiD6C1.jpg",
-    "featured": false
-  },
-  {
-    "title": "GoldenEye",
-    "description": "GoldenEye is a 1995 spy film, the seventeenth in the James Bond series produced by Eon Productions, and the first to star Pierce Brosnan as the fictional MI6 agent James Bond. It was directed by Martin Campbell and is the first in the series not to utilize any story elements from the works of novelist Ian Fleming.",
-    "genre": {
-      "name": "Action Thriller",
-      "description": "A thriller is a book, film, or play that tells an exciting fictional story about something such as criminal activities or spying."
-    },
-    "director": {
-      "name": "Martin Campbell",
-      "bio": "Martin Campbell (born 24 October 1943) is a New Zealand film and television director based in the United Kingdom. He directed the British miniseries Edge of Darkness (1985), for which he won a BAFTA, The Mask of Zorro (1998), and the James Bond films GoldenEye (1995) and Casino Royale (2006).",
-      "birth year": 1943
-    },
-    "imageURL": "https://en.wikipedia.org/wiki/Martin_Campbell#/media/File:Martin_Campbell.jpg",
-    "featured": true
-  }
-]
 
 app.use(express.static('public')); //serves static files from the 'public' folder
 
-// CREATE - POST - Allow new users to register)
-//Add a user
-/* We’ll expect JSON in this format
-{
-  ID: Integer,
-  Username: String,
-  Password: String,
-  Email: String,
-  Birthday: Date
-}*/
+// CREATE - POST - Allow new users to register (i.e. add new user))
 app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
     .then((user) => {
@@ -188,9 +126,16 @@ app.get('/', (req, res) => {
   res.send('Welcome to myFlix! - a web application to provide users with information about various movies, directors, genres, and more!');
 });
 
-//READ - GET - return a list of all movies to the user
+// READ - GET - return a list of ALL movies in the myFlix database
 app.get('/movies', (req, res) => {
-  res.status(200).json(movies);
+  Movies.find()
+    .then((movie) => {
+      res.json(movie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(200).send('Error: ' + err);
+    });
 });
 
 //READ - GET - return data (description, genre, director, image URL, featured-or-not) about a movie -by title-
