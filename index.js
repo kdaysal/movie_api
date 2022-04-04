@@ -162,19 +162,31 @@ app.get('/movies/genres/:genre', (req, res) => {
     });
 });
 
-//READ - GET - return data about a director (bio, birth year, death year) -by name-
-app.get('/movies/directors/:directorName', (req, res) => {
-  // const title = req.params.title; refactored below in { object destructuring } format
-  const { directorName } = req.params;
-  const director = movies.find(movie => movie.director.name === directorName).director;
-
-  if (director) {
-    res.status(200).json(director);
-  }
-  else {
-    res.status(400).send('no such genre in the database');
-  }
+// READ - GET - return data about a director -by director name-
+app.get('/movies/directors/:name', (req, res) => {
+  Movies.findOne({ 'Director.Name': req.params.name })
+    .then((movie) => {
+      res.json(movie.Director);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(400).send('Error: ' + err);
+    });
 });
+
+//DELETE THE BELOW ONCE THE REFACTORED VERSION (ABOVE) IS WORKING
+//READ - GET - return data about a director (bio, birth year, death year) -by name-
+// app.get('/movies/directors/:directorName', (req, res) => {
+//   const { directorName } = req.params;
+//   const director = movies.find(movie => movie.director.name === directorName).director;
+
+//   if (director) {
+//     res.status(200).json(director);
+//   }
+//   else {
+//     res.status(400).send('no such genre in the database');
+//   }
+// });
 
 // READ - GET - return data about a specific user -by username-
 app.get('/users/:Username', (req, res) => {
