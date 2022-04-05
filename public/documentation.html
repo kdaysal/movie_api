@@ -210,7 +210,22 @@
         <td>POST</td>
         <td>:username, :movieid</td>
         <td>None</td>
-        <td>A text message confirming that the movie was added</td>
+        <td>A JSON object with the full updated user profile. For example:
+          <pre>
+            <code>
+              {
+                "_id": "624a2fb09ca0b1a64b924c43",
+                "Username": "newUser2",
+                "Password": "xyz234",
+                "Email": "newUser2@gmail.com",
+                "FavoriteMovies": [
+                    "6243b2334ec432acf8e95005"
+                ],
+                "__v": 0
+            }
+            </code>
+          </pre>
+        </td>
       </tr>
       <tr>
         <td>Allow users to remove a movie from their list of favorites -by movie name-</td>
