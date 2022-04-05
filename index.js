@@ -60,20 +60,52 @@ app.post('/users', (req, res) => {
     });
 });
 
+// Update a user's info, by username
+/* We’ll expect JSON in this format
+{
+  Username: String,
+  (required)
+  Password: String,
+  (required)
+  Email: String,
+  (required)
+  BirthDate: Date
+}*/
+app.put('/users/:username', (req, res) => {
+  Users.findOneAndUpdate({ username: req.params.username }, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      BirthDate: req.body.Birthday
+    }
+  },
+  { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
+
+//DELETE THE BLOW BLOCK ONCE THE ABOVE ^ IS REFACTORED AND TESTED...
 //UPDATE - PUT - Allow users to update their existing user info (username) -by id-
-app.put('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const updatedUserName = req.body;
+// app.put('/users/:id', (req, res) => {
+//   const { id } = req.params;
+//   const updatedUserName = req.body;
 
-  let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+//   let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
 
-  if (user) {
-    user.username = updatedUserName.username;
-    res.status(200).json(user);
-  } else {
-    res.status(400).send('no such username exists, sorry!')
-  }
-})
+//   if (user) {
+//     user.username = updatedUserName.username;
+//     res.status(200).json(user);
+//   } else {
+//     res.status(400).send('no such username exists, sorry!')
+//   }
+// })
 
 //CREATE - POST - Allow users to add a movie to their list of favorites -by id- / -by movie name-
 app.post('/users/:id/:movieTitle', (req, res) => {
@@ -173,20 +205,6 @@ app.get('/movies/directors/:name', (req, res) => {
       res.status(400).send('Error: ' + err);
     });
 });
-
-//DELETE THE BELOW ONCE THE REFACTORED VERSION (ABOVE) IS WORKING
-//READ - GET - return data about a director (bio, birth year, death year) -by name-
-// app.get('/movies/directors/:directorName', (req, res) => {
-//   const { directorName } = req.params;
-//   const director = movies.find(movie => movie.director.name === directorName).director;
-
-//   if (director) {
-//     res.status(200).json(director);
-//   }
-//   else {
-//     res.status(400).send('no such genre in the database');
-//   }
-// });
 
 // READ - GET - return data about a specific user -by username-
 app.get('/users/:Username', (req, res) => {

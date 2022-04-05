@@ -166,32 +166,40 @@
         </td>
       </tr>
       <tr>
-        <td>Allow users to update their existing user info (username) -by id-</td>
+        <td>Allow users to update their existing user info (username, password, email, date of birth) -by id-</td>
         <td>/users/[id]</td>
         <td>PUT</td>
         <td>:id</td>
-        <td> A JSON object containing the updated username. For example:
+        <td> A JSON object containing the updated user details. For example:
           <pre>
             <code>
-  { 
-    "username": "oldestprez"
-  }
+              {
+                Username: String,
+                (required)
+                Password: String,
+                (required)
+                Email: String,
+                (required)
+                BirthDate: Date
+              }*/
             </code>
           </pre>
         </td>
         <td>A JSON object with the full updated user profile. For example:
           <pre>
             <code>
-                { 
-                    "id": "47816",
-                    "firstname": "George",
-                    "lastname": "Washington"
-                    "username": "oldestprez", 
-                    "email": "georgeW@gmail.com", 
-                    "password": "abc123xyz!"
-                    "birthday": "01/22/1732", 
-                    "telephone": "770-707-7700"
-                  }
+              {
+                "_id": "6246556d588b08b7830a67ed",
+                "Username": "UPDATEDsarah70",
+                "Password": "UPDATEDflix-pw",
+                "Email": "UPDATEDsarah70@gmail.com",
+                "BirthDate": "1986-07-10T00:00:00.000Z",
+                "FavoriteMovies": [
+                    "6243b2334ec432acf8e95005",
+                    "6243befd28d28bb9b6f2dac7",
+                    "6243c6d728d28bb9b6f2dac9"
+                ]
+            }
             </code>
           </pre>
         </td>
