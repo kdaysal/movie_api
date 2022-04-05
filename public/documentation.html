@@ -144,7 +144,7 @@
                 "Username": "newUser2",
                 "Password": "xyz234",
                 "Email": "newUser2@gmail.com",
-                "Birthday": "01/12/1956"
+                "BirthDate": "01/12/1956"
               }
             </code>
           </pre>
@@ -156,7 +156,7 @@
                 "Username": "newUser2",
                 "Password": "xyz234",
                 "Email": "newUser2@gmail.com",
-                "Birthday": "1956-01-12T05:00:00.000Z",
+                "BirthDate": "1956-01-12T05:00:00.000Z",
                 "FavoriteMovies": [],
                 "_id": "624a2fb09ca0b1a64b924c43",
                 "__v": 0
@@ -167,9 +167,9 @@
       </tr>
       <tr>
         <td>Allow users to update their existing user info (username, password, email, date of birth) -by id-</td>
-        <td>/users/[id]</td>
+        <td>/users/[username]</td>
         <td>PUT</td>
-        <td>:id</td>
+        <td>:username</td>
         <td> A JSON object containing the updated user details. For example:
           <pre>
             <code>
@@ -205,10 +205,10 @@
         </td>
       </tr>
       <tr>
-        <td>Allow users to add a movie to their list of favorites -by movie name-</td>
-        <td>/users/[id]/[movieTitle]</td>
+        <td>Allow users to add a movie to their list of favorites -by username- -by movieid-</td>
+        <td>/users/[username]/movies/[movieid]</td>
         <td>POST</td>
-        <td>:id, :movieTitle</td>
+        <td>:username, :movieid</td>
         <td>None</td>
         <td>A text message confirming that the movie was added</td>
       </tr>

@@ -33,6 +33,10 @@ app.use(methodOverride());
 
 app.use(express.static('public')); //serves static files from the 'public' folder
 
+// HTTP requests - these are just endpoints (or routes)
+// The structure is: app.METHOD(PATH, HANDLER)
+// 'app' is an instance of express()
+
 // CREATE - POST - Allow new users to register (i.e. add new user))
 app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
@@ -45,7 +49,7 @@ app.post('/users', (req, res) => {
             Username: req.body.Username,
             Password: req.body.Password,
             Email: req.body.Email,
-            Birthday: req.body.Birthday
+            BirthDate: req.body.BirthDate
           })
           .then((user) =>{res.status(201).json(user) })
         .catch((error) => {
@@ -60,24 +64,14 @@ app.post('/users', (req, res) => {
     });
 });
 
-// Update a user's info, by username
-/* We’ll expect JSON in this format
-{
-  Username: String,
-  (required)
-  Password: String,
-  (required)
-  Email: String,
-  (required)
-  BirthDate: Date
-}*/
+//UPDATE - PUT - update user info -by username-
 app.put('/users/:username', (req, res) => {
-  Users.findOneAndUpdate({ username: req.params.username }, { $set:
+  Users.findOneAndUpdate({ Username: req.params.username }, { $set:
     {
       Username: req.body.Username,
       Password: req.body.Password,
       Email: req.body.Email,
-      BirthDate: req.body.Birthday
+      BirthDate: req.body.BirthDate
     }
   },
   { new: true }, // This line makes sure that the updated document is returned
@@ -91,35 +85,36 @@ app.put('/users/:username', (req, res) => {
   });
 });
 
-//DELETE THE BLOW BLOCK ONCE THE ABOVE ^ IS REFACTORED AND TESTED...
-//UPDATE - PUT - Allow users to update their existing user info (username) -by id-
-// app.put('/users/:id', (req, res) => {
-//   const { id } = req.params;
-//   const updatedUserName = req.body;
+// CREATE - POST - Add a movie to a user's list of favorite movies -by Username- -by MovieID-
+app.post('/users/:username/movies/:movieid', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.username }, {
+     $push: { FavoriteMovies: req.params.movieid }
+   },
+   { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
 
-//   let user = users.find(user => user.id == id); //double equals to check equality on values only, not data type
+//DELETE THE BELOW ONCE THE ABOVE ^ IS REFACTORED AND TESTED
+//CREATE - POST - Allow users to add a movie to their list of favorites -by id- / -by movie name-
+// app.post('/users/:id/:movieTitle', (req, res) => {
+//   const { id, movieTitle } = req.params;//pulling multiple parameters from the url
+
+//   let user = users.find(user => user.id == id);
 
 //   if (user) {
-//     user.username = updatedUserName.username;
-//     res.status(200).json(user);
+//     user.favoriteMovies.push(movieTitle);
+//     res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
 //   } else {
-//     res.status(400).send('no such username exists, sorry!')
+//     res.status(400).send('no such movie title exists, sorry!')
 //   }
-// })
-
-//CREATE - POST - Allow users to add a movie to their list of favorites -by id- / -by movie name-
-app.post('/users/:id/:movieTitle', (req, res) => {
-  const { id, movieTitle } = req.params;//pulling multiple parameters from the url
-
-  let user = users.find(user => user.id == id);
-
-  if (user) {
-    user.favoriteMovies.push(movieTitle);
-    res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
-  } else {
-    res.status(400).send('no such movie title exists, sorry!')
-  }
-});
+// });
 
 //DELETE - Allow users to remove a movie from their list of favorites -by movie name-
 app.delete('/users/:id/:movieTitle', (req, res) => {
@@ -148,10 +143,6 @@ app.delete('/users/:id', (req, res) => {
     res.status(400).send('no such user exists, sorry!');
   }
 });
-
-// HTTP requests - these are just endpoints (or routes)
-// The structure is: app.METHOD(PATH, HANDLER)
-// 'app' is an instance of express()
 
 //READ - GET - Show home directory content
 app.get('/', (req, res) => {
