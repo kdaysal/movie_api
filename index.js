@@ -101,33 +101,20 @@ app.post('/users/:username/movies/:movieid', (req, res) => {
   });
 });
 
-//DELETE THE BELOW ONCE THE ABOVE ^ IS REFACTORED AND TESTED
-//CREATE - POST - Allow users to add a movie to their list of favorites -by id- / -by movie name-
-// app.post('/users/:id/:movieTitle', (req, res) => {
-//   const { id, movieTitle } = req.params;//pulling multiple parameters from the url
-
-//   let user = users.find(user => user.id == id);
-
-//   if (user) {
-//     user.favoriteMovies.push(movieTitle);
-//     res.status(200).send(`${movieTitle} has been added to user ${id}'s array`);
-//   } else {
-//     res.status(400).send('no such movie title exists, sorry!')
-//   }
-// });
-
 //DELETE - Allow users to remove a movie from their list of favorites -by movie name-
-app.delete('/users/:id/:movieTitle', (req, res) => {
-  const { id, movieTitle } = req.params;//pulling multiple parameters from the url
-
-  let user = users.find(user => user.id == id);
-
-  if (user) {
-    user.favoriteMovies = user.favoriteMovies.filter(title => title !== movieTitle);
-    res.status(200).send(`${movieTitle} has been removed from user ${id}'s array`);
-  } else {
-    res.status(400).send('no such movie title exists, sorry!')
-  }
+app.delete('/users/:username/movies/:movieid', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.username }, 
+      { $pull: { FavoriteMovies: req.params.movieid }
+  },
+  { new: true }, // this line makes sure that the updated document is returned
+  (err, updatedUser) => {
+      if (err) {
+          console.error(err);
+          res.status(500).send('Error: ' + err);
+      } else {
+          res.json(updatedUser);
+      }
+  });
 });
 
 //DELETE - Allow existing users to deregister from myFlix - by id-

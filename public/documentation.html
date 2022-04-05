@@ -228,12 +228,27 @@
         </td>
       </tr>
       <tr>
-        <td>Allow users to remove a movie from their list of favorites -by movie name-</td>
-        <td>/users/[id]/[movieTitle]</td>
+        <td>Allow users to remove a movie from their list of favorites -by username- -by movieid--</td>
+        <td>/users/[username]/[movieid]</td>
         <td>DELETE</td>
-        <td>:id, :movieTitle</td>
+        <td>:username, :movieid</td>
         <td>None</td>
-        <td>A text message confirming that the movie was removed</td>
+        <td>A JSON object with the full updated user profile. For example:
+          <pre>
+            <code>
+              {
+                "_id" : ObjectId("6246556d588b08b7830a67ed"),
+                "Username" : "kdaysal123",
+                "Password" : "secret-password",
+                "Email" : "kdaysal123@gmail.com",
+                "BirthDate" : ISODate("1986-07-10T00:00:00Z"),
+                "FavoriteMovies" : [
+                        ObjectId("6243befd28d28bb9b6f2dac7"),
+                        ObjectId("6243c6d728d28bb9b6f2dac9"),
+                ]
+            </code>
+          </pre>
+        </td>
       </tr>
       <tr>
         <td>Allow existing users to deregister from myFlix</td>
