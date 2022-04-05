@@ -117,19 +117,35 @@ app.delete('/users/:username/movies/:movieid', (req, res) => {
   });
 });
 
-//DELETE - Allow existing users to deregister from myFlix - by id-
-app.delete('/users/:id', (req, res) => {
-  const { id } = req.params;//pulling multiple parameters from the url
-
-  let user = users.find(user => user.id == id);
-
-  if (user) {
-    users = users.filter(user => user.id != id); //comparing string to a number, do not use strict equality here
-    res.status(200).send(`user ${id} has been deregistered from myFlix`);
-  } else {
-    res.status(400).send('no such user exists, sorry!');
-  }
+//DELETE - Allow existing users to deregister from myFlix - by username-
+app.delete('/users/:username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.username + ' was not found');
+      } else {
+        res.status(200).send(req.params.username + ' was deleted.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
+//DELETE ALL OF THE BELOW CODE BLOCK ONCE THE ABOVE ^ HAS BEEN REFACTORED AND TESTED
+//DELETE - Allow existing users to deregister from myFlix - by id-
+// app.delete('/users/:id', (req, res) => {
+//   const { id } = req.params;//pulling multiple parameters from the url
+
+//   let user = users.find(user => user.id == id);
+
+//   if (user) {
+//     users = users.filter(user => user.id != id); //comparing string to a number, do not use strict equality here
+//     res.status(200).send(`user ${id} has been deregistered from myFlix`);
+//   } else {
+//     res.status(400).send('no such user exists, sorry!');
+//   }
+// });
 
 //READ - GET - Show home directory content
 app.get('/', (req, res) => {
