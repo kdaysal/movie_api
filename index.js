@@ -136,7 +136,7 @@ app.get('/', (req, res) => {
 });
 
 // READ - GET - return a list of ALL movies in the myFlix database
-app.get('/movies', (req, res) => {
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.find()
     .then((movie) => {
       res.json(movie);
