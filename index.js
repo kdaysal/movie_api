@@ -21,19 +21,16 @@ const res = require('express/lib/response');
 const app = express();
 
 app.use(morgan('common'));
-
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
-
-
-
 app.use(express.static('public')); //serves static files from the 'public' folder
 
-// HTTP requests - these are just endpoints (or routes)
+let auth = require('./auth')(app);
+const passport = require('passport'); //require the passport module
+require('./passport'); //import the passport.js file - recall that Node will look for a 'passport.js' file in my root directory even though I didn't specify the '.js' extension
+
+// Below are my HTTP requests - these are just endpoints (or routes)
 // The structure is: app.METHOD(PATH, HANDLER)
 // 'app' is an instance of express()
 
