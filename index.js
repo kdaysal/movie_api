@@ -93,7 +93,7 @@ app.post('/users/:username/movies/:movieid', (req, res) => {
       console.error(err);
       res.status(500).send('Error: ' + err);
     } else {
-      res.json(updatedUser);
+      res.status(201).json(updatedUser);
     }
   });
 });
@@ -129,20 +129,6 @@ app.delete('/users/:username', (req, res) => {
       res.status(500).send('Error: ' + err);
     });
 });
-//DELETE ALL OF THE BELOW CODE BLOCK ONCE THE ABOVE ^ HAS BEEN REFACTORED AND TESTED
-//DELETE - Allow existing users to deregister from myFlix - by id-
-// app.delete('/users/:id', (req, res) => {
-//   const { id } = req.params;//pulling multiple parameters from the url
-
-//   let user = users.find(user => user.id == id);
-
-//   if (user) {
-//     users = users.filter(user => user.id != id); //comparing string to a number, do not use strict equality here
-//     res.status(200).send(`user ${id} has been deregistered from myFlix`);
-//   } else {
-//     res.status(400).send('no such user exists, sorry!');
-//   }
-// });
 
 //READ - GET - Show home directory content
 app.get('/', (req, res) => {
@@ -217,5 +203,5 @@ app.use((err, req, res, next) => {
 
 // listen for requests on port 8080
 app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.');
+  console.log('Your app is listening on port 8080.'); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
 });
