@@ -6,13 +6,12 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-//leaving my db name as the default 'test' for now
 //this allows Mongoose to connect to the db to perform CRUD operations on its documents from within my REST API
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }); //leaving my db name as the default 'test' for now
 
 //Utilize Express framework for this app
 const express = require('express'),
-  morgan = require('morgan'), //custom middleware for loging request details to log.txt
+  morgan = require('morgan'), //custom middleware for loging all request details to a log.txt file
   bodyParser = require('body-parser'), //middleware for error-handling
   methodOverride = require('method-override'), //middleware for error-handling
   uuid = require('uuid');
@@ -26,13 +25,32 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(express.static('public')); //serves static files from the 'public' folder
 
+const cors = require('cors'); // implement CORS (Cross-Origin-Resource-Sharing) so the receiving server can identify where requests are coming from and allow or disallow them
+app.use(cors()); //leaving the default set up to allow requests from ALL origins for purposes of task 2.10, but this will be modified later to give only certain origins access 
+
+//the example code block below allows only certain origins access to my API (to implement - refactor as needed, then use this block to replace the 'app.use(cors());' line from above ^)
+/*
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
+*/
+
 let auth = require('./auth')(app);
 const passport = require('passport'); //require the passport module
 require('./passport'); //import the passport.js file - recall that Node will look for a 'passport.js' file in my root directory even though I didn't specify the '.js' extension
 
 // Below are my HTTP requests - these are just endpoints (or routes)
 // The structure is: app.METHOD(PATH, HANDLER)
-// 'app' is an instance of express()
+// Remember that 'app' is just an instance of express()
 
 // CREATE - POST - Allow new users to register (i.e. add new user)) - note, no authentication parameter in this endpoint/route
 app.post('/users', (req, res) => {
