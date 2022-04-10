@@ -54,15 +54,16 @@ require('./passport'); //import the passport.js file - recall that Node will loo
 
 // CREATE - POST - Allow new users to register (i.e. add new user)) - note, no authentication parameter in this endpoint/route
 app.post('/users', (req, res) => {
-  Users.findOne({ Username: req.body.Username })
+  let hashedPassword = Users.hashPassword(req.body.Password); //hash any password entered by the user when registering before storing it in the MongoDB database
+  Users.findOne({ Username: req.body.Username }) //first check if a user with the requested username already exists
     .then((user) => {
       if (user) {
-        return res.status(400).send(req.body.Username + 'already exists');
+        return res.status(400).send(req.body.Username + 'already exists'); //send response if user already exists (and do not create a duplicate user)
       } else {
         Users
           .create({
             Username: req.body.Username,
-            Password: req.body.Password,
+            Password: hashedPassword, //assigning and storing the newly created hashedPassword, instead of the actual user-submitted password
             Email: req.body.Email,
             BirthDate: req.body.BirthDate
           })
@@ -73,7 +74,7 @@ app.post('/users', (req, res) => {
         })
       }
     })
-    .catch((error) => {
+    .catch((error) => { //in case any other error is encountered during the POST attempt, return the error msg
       console.error(error);
       res.status(500).send('Error: ' + error);
     });
