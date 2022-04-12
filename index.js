@@ -2,6 +2,9 @@
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
+//Server-Side Validation
+const { check, validationResult } = require('express-validator');
+
 //these variables refer to the model names as defined in the models.js file
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -53,32 +56,48 @@ require('./passport'); //import the passport.js file - recall that Node will loo
 // Remember that 'app' is just an instance of express()
 
 // CREATE - POST - Allow new users to register (i.e. add new user)) - note, no authentication parameter in this endpoint/route
-app.post('/users', (req, res) => {
-  let hashedPassword = Users.hashPassword(req.body.Password); //hash any password entered by the user when registering before storing it in the MongoDB database
-  Users.findOne({ Username: req.body.Username }) //first check if a user with the requested username already exists
-    .then((user) => {
-      if (user) {
-        return res.status(400).send(req.body.Username + 'already exists'); //send response if user already exists (and do not create a duplicate user)
-      } else {
-        Users
-          .create({
-            Username: req.body.Username,
-            Password: hashedPassword, //assigning and storing the newly created hashedPassword, instead of the actual user-submitted password
-            Email: req.body.Email,
-            BirthDate: req.body.BirthDate
-          })
-          .then((user) =>{res.status(201).json(user) })
-        .catch((error) => {
-          console.error(error);
-          res.status(500).send('Error: ' + error);
-        })
-      }
-    })
-    .catch((error) => { //in case any other error is encountered during the POST attempt, return the error msg
-      console.error(error);
-      res.status(500).send('Error: ' + error);
-    });
-});
+app.post('/users',
+  // Validation logic for the request
+  [
+    check('Username', 'Username is required').isLength({min: 5}), //Username >= 5 chars
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(), //Username does not contain invalid special chars
+    check('Password', 'Password is required').not().isEmpty(), //Password is provided
+    check('Email', 'Email does not appear to be valid').isEmail() //Email is valid format
+  ], (req, res) => {
+
+  // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) { //if there are errors
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password); //hash the password
+    Users.findOne({ Username: req.body.Username }) // Search to see if the requested username already exists in the db
+      .then((user) => {
+        if (user) {
+          //If the user is found, send a response that it already exists
+          return res.status(400).send(req.body.Username + ' already exists');
+        } else { //otherwise create the new user
+          Users
+            .create({
+              Username: req.body.Username,
+              Password: hashedPassword, //hash password prior to storing in db
+              Email: req.body.Email,
+              Birthday: req.body.Birthday
+            })
+            .then((user) => { res.status(201).json(user) })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      });
+  });
 
 //UPDATE - PUT - update user info -by username-
 app.put('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
