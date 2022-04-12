@@ -250,7 +250,8 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong - oh no!');
 });
 
-// listen for requests on port 8080
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080.'); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
+// listen for requests on pre-configured port OR port 8080
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
 });
