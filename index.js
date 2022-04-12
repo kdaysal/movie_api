@@ -59,13 +59,13 @@ require('./passport'); //import the passport.js file - recall that Node will loo
 app.post('/users',
   // Validation logic for the request
   [
-    check('Username', 'Username is required').isLength({min: 5}), //Username >= 5 chars
+    check('Username', 'Username is required').isLength({ min: 5 }), //Username >= 5 chars
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(), //Username does not contain invalid special chars
     check('Password', 'Password is required').not().isEmpty(), //Password is provided
     check('Email', 'Email does not appear to be valid').isEmail() //Email is valid format
   ], (req, res) => {
 
-  // check the validation object for errors
+    // check the validation object for errors
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) { //if there are errors
@@ -100,8 +100,18 @@ app.post('/users',
   });
 
 //UPDATE - PUT - update user info -by username-
-app.put('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.username }, { $set:
+app.put('/users/:username', passport.authenticate('jwt', { session: false }), [
+  check('Username', 'Username is required').isLength({ min: 5 }), //Username >= 5 chars
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(), //Username does not contain invalid special chars
+  check('Password', 'Password is required').not().isEmpty(), //Password is provided
+  check('Email', 'Email does not appear to be valid').isEmail() //Email is valid format
+], (req, res) => {
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) { //if there are errors
+    return res.status(422).json({ errors: errors.array() });
+  }
+  Users.findOneAndUpdate({ Username: req.params.username }, {
+    $set:
     {
       Username: req.body.Username,
       Password: req.body.Password,
@@ -109,47 +119,48 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }), (r
       BirthDate: req.body.BirthDate
     }
   },
-  { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if(err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });
+    { new: true }, // This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedUser);
+      }
+    });
 });
 
 // CREATE - POST - Add a movie to a user's list of favorite movies -by Username- -by MovieID-
 app.post('/users/:username/movies/:movieid', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.username }, {
-     $push: { FavoriteMovies: req.params.movieid }
-   },
-   { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.status(201).json(updatedUser);
-    }
-  });
+    $push: { FavoriteMovies: req.params.movieid }
+  },
+    { new: true }, // This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.status(201).json(updatedUser);
+      }
+    });
 });
 
 //DELETE - Allow users to remove a movie from their list of favorites -by movie name-
 app.delete('/users/:username/movies/:movieid', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.username }, 
-      { $pull: { FavoriteMovies: req.params.movieid }
-  },
-  { new: true }, // this line makes sure that the updated document is returned
-  (err, updatedUser) => {
+  Users.findOneAndUpdate({ Username: req.params.username },
+    {
+      $pull: { FavoriteMovies: req.params.movieid }
+    },
+    { new: true }, // this line makes sure that the updated document is returned
+    (err, updatedUser) => {
       if (err) {
-          console.error(err);
-          res.status(500).send('Error: ' + err);
+        console.error(err);
+        res.status(500).send('Error: ' + err);
       } else {
-          res.json(updatedUser);
+        res.json(updatedUser);
       }
-  });
+    });
 });
 
 //DELETE - Allow existing users to deregister from myFlix - by username-
