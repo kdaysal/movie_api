@@ -88,7 +88,7 @@ app.post('/users',
               Username: req.body.Username,
               Password: hashedPassword, //hash password prior to storing in db
               Email: req.body.Email,
-              Birthday: req.body.Birthday
+              BirthDate: req.body.BirthDate
             })
             .then((user) => { res.status(201).json(user) })
             .catch((error) => {
