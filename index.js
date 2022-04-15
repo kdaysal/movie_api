@@ -10,7 +10,11 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 //this allows Mongoose to connect to the db to perform CRUD operations on its documents from within my REST API
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }); //leaving my db name as the default 'test' for now
+//connect to my local db
+//mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }); //leaving my db name as the default 'test' for now
+
+//connect to MongoDB Atlas db
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Utilize Express framework for this app
 const express = require('express'),
@@ -252,6 +256,6 @@ app.use((err, req, res, next) => {
 
 // listen for requests on pre-configured port OR port 8080
 const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
+app.listen(port, '0.0.0.0', () => {
+  console.log('Listening on Port ' + port); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
 });
