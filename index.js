@@ -16,7 +16,7 @@ const Users = Models.User;
 //connect to MongoDB Atlas db
 //process.env.CONNECTION_URI = using environment variables to hide the online database's connection URI
 console.log(process.env.CONNECTION_URI);//for debugging connection errors - DELETE LATER
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI || 'mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true }); //note - with this syntax, can still connect to localhost (port 8080)
 
 //Utilize Express framework for this app
 const express = require('express'),
