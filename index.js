@@ -36,6 +36,7 @@ app.use(express.static('public')); //serves static files from the 'public' folde
 const cors = require('cors'); // implement CORS (Cross-Origin-Resource-Sharing) so the receiving server can identify where requests are coming from and allow or disallow them
 app.use(cors()); //leaving the default set up to allow requests from ALL origins for purposes of task 2.10, but this will be modified later to give only certain origins access 
 
+/* *********************************************** */
 //the example code block below allows only certain origins access to my API (to implement - refactor as needed, then use this block to replace the 'app.use(cors());' line from above ^)
 /*
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
@@ -51,6 +52,7 @@ app.use(cors({
   }
 }));
 */
+/* *********************************************** */
 
 let auth = require('./auth')(app);
 const passport = require('passport'); //require the passport module
@@ -190,16 +192,31 @@ app.get('/', (req, res) => {
 });
 
 // READ - GET - return a list of ALL movies in the myFlix database
-app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+//PASSPORT.AUTHENTICATE(...) is temporarily removed for testing purposes. Will restore later with the commented-out code block below this section
+app.get("/movies", function (req, res) {
   Movies.find()
-    .then((movie) => {
-      res.json(movie);
+    .then(function (movies) {
+      res.status(201).json(movies);
     })
-    .catch((err) => {
-      console.error(err);
-      res.status(200).send('Error: ' + err);
+    .catch(function (error) {
+      console.error(error);
+      res.status(500).send("Error: " + error);
     });
 });
+
+/*******************************************/
+//ORIGINAL CODE BLOCK WITH PASSPORT.AUTHENTICATE(...) - restore above once testing is completed
+// app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   Movies.find()
+//     .then((movie) => {
+//       res.status(201).json(movie);
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//       res.status(500).send('Error: ' + err);
+//     });
+// });
+/*******************************************/
 
 // READ - GET - return data about a move -by title-
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
