@@ -15,6 +15,7 @@ const Users = Models.User;
 
 //connect to MongoDB Atlas db
 //process.env.CONNECTION_URI = using environment variables to hide the online database's connection URI
+console.log(process.env.CONNECTION_URI);//for debugging connection errors - DELETE LATER
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Utilize Express framework for this app
