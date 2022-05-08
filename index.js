@@ -194,7 +194,7 @@ app.get('/', (req, res) => {
 
 // READ - GET - return a list of ALL movies in the myFlix database
 //PASSPORT.AUTHENTICATE(...) is temporarily removed for testing purposes. Will restore later with the commented-out code block below this section
-app.get("/movies", function (req, res) {
+app.get("/movies", passport.authenticate('jwt', { session: false }), function (req, res) {
   Movies.find()
     .then(function (movies) {
       res.status(201).json(movies);
@@ -206,7 +206,7 @@ app.get("/movies", function (req, res) {
 });
 
 /*******************************************/
-//ORIGINAL CODE BLOCK WITH PASSPORT.AUTHENTICATE(...) - restore above once testing is completed
+//ORIGINAL CODE BLOCK WITH PASSPORT.AUTHENTICATE(...) - restore above once testing is completed, then delete this codeblock
 // app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
 //   Movies.find()
 //     .then((movie) => {
