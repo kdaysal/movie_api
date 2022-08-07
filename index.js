@@ -208,6 +208,11 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 });
 
 //READ - GET - Show home directory content
+/**
+ * Redirect user to home directory (index.html)
+ * @param {express.request} req
+ * @param {express.response} res
+ */
 app.get('/', (req, res) => {
   res.send('Welcome to myFlix! - a web application to provide users with information about various movies, directors, genres, and more!');
 });
@@ -280,7 +285,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong - oh no!');
 });
 
-// listen for requests on pre-configured port OR port 8080
+/**
+ * Listen for requests and run the server on the specified params OR port 8080
+ * @function app.listen
+ * @param {number} port
+ */
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log('Listening on Port ' + port); //always make sure this line is printed to the terminal before testing requests, otherwise your app is not running (listening)
