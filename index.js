@@ -77,6 +77,12 @@ require('./passport'); //import the passport.js file - recall that Node will loo
 */
 
 // CREATE - POST - Allow new users to register (i.e. add new user)) - note, no authentication parameter in this endpoint/route
+/**
+* Validates that Username, Password, and Email inputs are all correctly formatted
+* @param {string} Username
+* @param {string} Password
+* @param {string} Email
+*/
 app.post('/users',
   // Validation logic for the request
   [
