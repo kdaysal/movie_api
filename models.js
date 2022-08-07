@@ -1,7 +1,18 @@
-const mongoose = require('mongoose'), //mongoose is an ORM (Object Document Mapper) which I'm using to enforce uniformity (via specified models) in my data (from the application-side)
+/**
+* Mongoose is an ODM (Object Document Mapper) that I am using with
+* my MongoDB document architecture for the purpose of enforcing
+* uniformity in my data via specified models from the application-side 
+* to ensure that all data follows a specified format.
+*/
+
+const mongoose = require('mongoose'), //mongoose is an ORM (Object Document Mapper) which I'm using to enforce uniformity via specified models in my data from the application-side
   bcrypt = require('bcrypt'); //this is a Node.js module used to hash users' passwords and compare hashed passwords every time users log in
 
-//defining the schemas for Movies and Users collections
+/**
+* This section defines the schemas for my 'Movies' and 'Users' collections
+* 'Movies' will house all data related to the movies (title, description, genre, etc)
+* 'Users' will house all data related to the user's profile (name, dob, password, etc)
+*/
 let movieSchema = mongoose.Schema({
   Title: { type: String, required: true },
   Description: { type: String, required: true },
@@ -32,7 +43,7 @@ userSchema.statics.hashPassword = (password) => {
 };
 
 //this compares the submitted hashed passwords with the hashed passwords already stored in the db
-userSchema.methods.validatePassword = function(password) { //here I'm not using arrow function syntax because if I did, the 'this' would be bound to the object that owns the function (in this case, 'userSchema.methods', rather than the intended 'user')
+userSchema.methods.validatePassword = function (password) { //here I'm not using arrow function syntax because if I did, the 'this' would be bound to the object that owns the function (in this case, 'userSchema.methods', rather than the intended 'user')
   return bcrypt.compareSync(password, this.Password);
 };
 

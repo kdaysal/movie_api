@@ -1,3 +1,10 @@
+/**
+* Mongoose is an ODM (Object Document Mapper) that I am using with
+* my MongoDB document architecture for the purpose of enforcing
+* uniformity in my data via specified models from the application-side 
+* to ensure that all data follows a specified format.
+*/
+
 //require the Mongoose package and models.js file
 const mongoose = require('mongoose');
 const Models = require('./models.js');
@@ -9,23 +16,24 @@ const { check, validationResult } = require('express-validator');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-//this allows Mongoose to connect to the db to perform CRUD operations on its documents from within my REST API
-//connect to my local db
-//mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }); //leaving my db name as the default 'test' for now
+/**
+* The section below allows Mongoose to connect to the db to perform CRUD operations 
+* on its documents from within my REST API. For learning purposes, note
+* that `process.env.CONNECTION_URI` is using environment variables to hide
+* the online database's connection URI
+*/
 
-//connect to MongoDB Atlas db
-//process.env.CONNECTION_URI = using environment variables to hide the online database's connection URI
-console.log(process.env.CONNECTION_URI);//for debugging connection errors - DELETE LATER
+console.log(process.env.CONNECTION_URI);//for debugging connection errors
+//For learning purposes, the original line was: mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true }); //note -  my db name is the default 'test' (for now)
 mongoose.connect(process.env.CONNECTION_URI || 'mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true }); //note - with this syntax, can still connect to localhost (port 8080)
 
-//Utilize Express framework for this app
+//Utilizing Express framework for this app
 const express = require('express'),
   morgan = require('morgan'), //custom middleware for loging all request details to a log.txt file
   bodyParser = require('body-parser'), //middleware for error-handling
   methodOverride = require('method-override'), //middleware for error-handling
   uuid = require('uuid');
 const res = require('express/lib/response');
-
 const app = express();
 
 app.use(morgan('common'));
@@ -37,8 +45,12 @@ app.use(express.static('public')); //serves static files from the 'public' folde
 const cors = require('cors'); // implement CORS (Cross-Origin-Resource-Sharing) so the receiving server can identify where requests are coming from and allow or disallow them
 app.use(cors()); //leaving the default set up to allow requests from ALL origins for purposes of task 2.10, but this will be modified later to give only certain origins access 
 
-/* *********************************************** */
-//the example code block below allows only certain origins access to my API (to implement - refactor as needed, then use this block to replace the 'app.use(cors());' line from above ^)
+/**
+* The example code block below allows only certain origins access 
+* to my API (to implement - refactor as needed, then use this block 
+* to replace the 'app.use(cors());' line from above ^)
+*/
+
 /*
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
@@ -53,15 +65,16 @@ app.use(cors({
   }
 }));
 */
-/* *********************************************** */
 
 let auth = require('./auth')(app);
 const passport = require('passport'); //require the passport module
 require('./passport'); //import the passport.js file - recall that Node will look for a 'passport.js' file in my root directory even though I didn't specify the '.js' extension
 
-// Below are my HTTP requests - these are just endpoints (or routes)
-// The structure is: app.METHOD(PATH, HANDLER)
-// Remember that 'app' is just an instance of express()
+/**
+* Below are my HTTP requests - these are just endpoints (or routes) 
+* The structure is: app.METHOD(PATH, HANDLER) 
+* Remember that 'app' is just an instance of express()
+*/
 
 // CREATE - POST - Allow new users to register (i.e. add new user)) - note, no authentication parameter in this endpoint/route
 app.post('/users',
@@ -206,20 +219,6 @@ app.get("/movies", passport.authenticate('jwt', { session: false }), function (r
     });
 });
 
-/*******************************************/
-//ORIGINAL CODE BLOCK WITH PASSPORT.AUTHENTICATE(...) - restore above once testing is completed, then delete this codeblock
-// app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-//   Movies.find()
-//     .then((movie) => {
-//       res.status(201).json(movie);
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       res.status(500).send('Error: ' + err);
-//     });
-// });
-/*******************************************/
-
 // READ - GET - return data about a move -by title-
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
   Movies.findOne({ Title: req.params.title })
@@ -257,6 +256,7 @@ app.get('/movies/directors/:name', passport.authenticate('jwt', { session: false
 });
 
 // READ - GET - return data about a specific user -by username-
+//TODO - refactor to use lowercase ':username' for the url variable to maintain consistency with the rest of the url variables
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.findOne({ Username: req.params.Username })
     .then((user) => {

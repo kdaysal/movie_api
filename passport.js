@@ -1,5 +1,6 @@
-/*
-This file is used to define authentication / authorization strategies including JWT (Jason Web Token) and password hashing
+/**
+* This file is used to define authentication / authorization strategies,
+* including JWT (Jason Web Token) and password hashing
 */
 
 const passport = require('passport'),
@@ -11,7 +12,12 @@ let Users = Models.User,
     JWTStrategy = passportJWT.Strategy,
     ExtractJWT = passportJWT.ExtractJwt;
 
+/**
+* This section defines a new Passport strategy:
+* 'LocalStrategy' defines the basic HTTP authentication for login requests
+*/
 passport.use(new LocalStrategy({
+    //takes a username and password from the request body and uses Mongoose to check the db for a user with the same username
     usernameField: 'Username',
     passwordField: 'Password'
 }, (username, password, callback) => {
@@ -40,6 +46,10 @@ passport.use(new LocalStrategy({
     });
 }));
 
+/**
+* This section defines another new Passport strategy:
+* 'JWTStrategy' allows me to authenticate users based on the JWT submitted alongside their request
+*/
 passport.use(new JWTStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(), //extract JWT from the header of the HTTP request
     secretOrKey: 'your_jwt_secret' //secret key to verify the signature of the JWT
