@@ -86,3 +86,12 @@ reading data from requests and morgan for logging.
 * The API source code must be deployed to a publicly accessible platform like GitHub.
 
 * The API must be deployed to Heroku.
+
+## Additional Mongo DB notes
+
+* The following 2 screenshots show the structure of my 'Movies' and 'Users' collections in MongoDB:
+
+<p float="left">
+  <img src="https://github.com/kdaysal/movie_api/blob/main/img/1-movies-collection.png" width="300" />
+  <img src="https://github.com/kdaysal/movie_api/blob/main/img/2-users-collection.png" width="300" />
+</p>
