@@ -89,7 +89,7 @@ reading data from requests and morgan for logging.
 
 ## Additional Mongo DB notes
 
-* The following 2 screenshots show the structure of my 'Movies' and 'Users' collections in MongoDB:
+* The following 2 screenshots show examples of how objects are structured in my 'Movies' and 'Users' collections in MongoDB:
 
 <p float="left">
   <img src="https://github.com/kdaysal/movie_api/blob/main/img/1-movies-collection.png" width="300" />
