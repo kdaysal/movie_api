@@ -30,21 +30,22 @@ single movie by title to the user
 
 ## Technologies / Strategies Used
 
-* Node.js
-* Express
+* [Node.js](https://nodejs.org/en/)
+* [Express](https://expressjs.com/)
     * request parameters
     * body-parser module
     * uuid module
     * status codes
-* Morgan (middleware library)
-* Postman (endpoint testing)
-* PostgreSQL (used during initial development phase, later transitioned to MongoDB)
-* MongoDB
-    * MongoDB Atlas 
-* Mongoose
-* HTTP authentication
-* JWT authentication
-* Passport (middleware tool)
+* [Morgan](https://expressjs.com/en/resources/middleware/morgan.html) (middleware library)
+* [Postman](https://www.postman.com/) (endpoint testing)
+* [PostgreSQL](https://www.postgresql.org/) (used during initial development phase, later transitioned to MongoDB)
+* [MongoDB](https://www.mongodb.com/)
+    * MongoDB Atlas (online hosted database)
+* [Mongoose](https://mongoosejs.com/docs/) (used to define db schema)
+* [HTTP authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication)
+* [JWT](https://jwt.io/introduction) authentication
+* [Passport](https://www.passportjs.org/) (Node.js middleware tool)
+* [Heroku](https://www.heroku.com/) (PaaS provider to host my API)
 * RESTful architecture
 * CRUD functionality
 
